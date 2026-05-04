@@ -1,0 +1,126 @@
+---
+title: "storyboard"
+output: beamer_presentation
+date: "2026-05-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+```{r,}
+cfbdata = read.csv("cfbdata_with_wins.csv")
+colnames(cfbdata)
+cfbdata$RUN_PERCENT  <- as.numeric(sub("%", "", cfbdata$RUN_PERCENT))
+cfbdata$PASS_PERCENT <- as.numeric(sub("%", "", cfbdata$PASS_PERCENT))
+library(ggplot2)
+```
+```{r}
+cfbdata <- cfbdata[cfbdata$Year != 2020, ]
+cols <- c("YDS", "R_ATT", "R_AVG", "ATT", "CMPPercent", "RTG", "RUN_PERCENT")
+cfbdata[cols] <- lapply(cfbdata[cols], function(x) as.numeric(gsub(",", "", x)))
+cfbdata <- cfbdata[complete.cases(cfbdata), ]
+```
+
+```{r}
+cfbdata$R_YDS = cfbdata$R_ATT * cfbdata$R_AVG
+```
+
+
+
+
+```{r}
+run_teams <- c("Army", "Navy", "AirForce", "GeorgiaSouthern", "GeorgiaTech")
+pass_teams <- c("SMU", "Hawaii", "EastCarolina", "TexasTech", "WashingtonState")
+
+extreme_teams <- c(run_teams, pass_teams)
+team_df2 <- cfbdata[cfbdata$UniversityName %in% extreme_teams, ]
+team_df2$Group <- ifelse(team_df2$UniversityName %in% pass_teams, "Pass-Heavy", "Run-First")
+
+ggplot(team_df2, aes(x = Year, y = PASS_PERCENT, color = UniversityName, linetype = Group)) +
+  geom_line(linewidth = 1.1) +
+  labs(title = "The Two Extremes of CFB Offensive Philosophy",
+       x = "Year", y = "Pass Play %", color = NULL, linetype = NULL) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(team_df2, aes(x = Year, y = YDS, color = UniversityName, linetype = Group)) +
+  geom_line(linewidth = 1.1) +
+  labs(title = "Pass-Heavy Teams Racked Up Far More Passing Yards",
+       x = "Year", y = "Passing Yards", color = NULL, linetype = NULL) +
+  theme_minimal()
+```
+
+```{r}
+cfbdata$PhilosophyGroup <- ifelse(cfbdata$PASS_PERCENT > 60, "Pass-Heavy (>60%)",
+                           ifelse(cfbdata$PASS_PERCENT < 40, "Run-Heavy (<40%)", NA))
+
+graph2_df <- cfbdata[!is.na(cfbdata$PhilosophyGroup), ]
+graph2_df$TOTAL_YDS <- graph2_df$YDS + graph2_df$R_YDS
+
+ggplot(graph2_df, aes(x = PhilosophyGroup, y = TOTAL_YDS, fill = PhilosophyGroup)) +
+  geom_boxplot() +
+  labs(title = "Pass-Heavy Teams Gain More Total Yards",
+       x = NULL, y = "Total Yards", fill = NULL) +
+  theme_minimal()
+```
+However, passing more does not have all positives.
+
+```{r}
+avg_int <- aggregate(INT ~ UniversityName + Group, data = team_df2, FUN = mean)
+
+ggplot(avg_int, aes(x = reorder(UniversityName, INT), y = INT, fill = Group)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "The Cost of Throwing More: Interceptions by Team",
+       x = NULL, y = "Avg Interceptions", fill = NULL) +
+  theme_minimal()
+```
+
+
+```{r}
+cfbdata$TOTAL_YPP <- (cfbdata$YDS + cfbdata$R_YDS) / cfbdata$TOTAL_PLAYS
+
+cfbdata$PhilosophyGroup <- ifelse(cfbdata$PASS_PERCENT > 60, "Pass-Heavy (>60%)",
+                           ifelse(cfbdata$PASS_PERCENT < 40, "Run-Heavy (<40%)", NA))
+
+graph4_df <- cfbdata[!is.na(cfbdata$PhilosophyGroup), ]
+
+ggplot(graph4_df, aes(x = PhilosophyGroup, y = TOTAL_YPP, fill = PhilosophyGroup)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.1, fill = "white") +
+  labs(title = "Philosophy is not very Meaningful for Yards Per Play",
+       x = NULL, y = "Total Yards Per Play", fill = NULL) +
+  theme_minimal()
+```
+
+```{r}
+cfbdata$PhilosophyGroup <- ifelse(cfbdata$PASS_PERCENT > 60, "Pass-Heavy (>60%)",
+                           ifelse(cfbdata$PASS_PERCENT < 40, "Run-Heavy (<40%)", NA))
+graph6_df <- cfbdata[!is.na(cfbdata$PhilosophyGroup), ]
+
+
+ggplot(graph6_df, aes(x = PhilosophyGroup, y = WinPct, fill = PhilosophyGroup)) +
+  geom_boxplot() +
+  labs(title = "Run-Heavy Teams Won More Games",
+       x = NULL, y = "Win %", fill = NULL) +
+  theme_minimal()
+```
+
+
+
+```{r}
+ggplot(cfbdata, aes(x = PASS_PERCENT, y = WinPct)) +
+  geom_point(alpha = 0.3, size = 1.5, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  labs(title = "More Passing Doesn't Mean More Winning",
+       x = "Pass Play %", y = "Win %") +
+  theme_minimal()
+```
+
+
+
+

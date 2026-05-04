@@ -1,0 +1,15 @@
+name: "math230.website"
+title: "My Website"
+description: |
+  My Website
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "Past Data Visualizations"
+      href: pastvis.html
+    - text: "Telling a Story with NFL Data"
+      href: Part3.html
+output: distill::distill_article
+

@@ -1,0 +1,1 @@
+"0","ggplot(StudentSurvey, aes(x = Year, y = TV, fill = Year)) + geom_violin(scale = ""width"", alpha = .5, draw_quantiles = c(.25,.5,.75)) + guides(fill = ""none"") + stat_summary(fun.data = ""mean_sdl"", fun.args = list(mult = 1), geom = ""pointrange"", color = ""red"") + geom_boxplot(width =.25)"

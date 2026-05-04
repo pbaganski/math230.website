@@ -1,0 +1,8 @@
+"0","avg_int <- aggregate(INT ~ UniversityName + Group, data = team_df2, FUN = mean)"
+"0",""
+"0","ggplot(avg_int, aes(x = reorder(UniversityName, INT), y = INT, fill = Group)) +"
+"0","  geom_col() +"
+"0","  coord_flip() +"
+"0","  labs(title = ""The Cost of Throwing More: Interceptions by Team"","
+"0","       x = NULL, y = ""Avg Interceptions"", fill = NULL) +"
+"0","  theme_minimal()"

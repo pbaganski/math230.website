@@ -1,0 +1,7 @@
+"0","ggplot(Cereal, aes(x = Calories, y = Company, fill = Company)) +"
+"0","  geom_density_ridges("
+"0","    aes(point_shape = Company, point_fill = Company, point_size = Sodium), "
+"0","    alpha = .2, point_alpha = 1, jittered_points = TRUE, scale = 1"
+"0","  ) +"
+"0","  scale_point_color_hue(l = 40) + scale_point_size_continuous(range = c(0.5, 4)) +"
+"0","  scale_discrete_manual(aesthetics = ""point_shape"", values = c(21, 22, 23))"

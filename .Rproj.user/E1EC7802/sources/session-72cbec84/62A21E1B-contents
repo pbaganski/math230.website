@@ -1,0 +1,115 @@
+---
+title: "A Wide Range of Data Visualizations"
+description: |
+  A Collection.
+author:
+  - name: Patrick Baganski
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(aRtsy)
+library(ggplot2)
+library(ggridges)
+library(Lock5Data)
+library(Hmisc)
+data(StudentSurvey)
+StudentSurvey = StudentSurvey[complete.cases(StudentSurvey),]
+StudentSurvey$Year = factor(StudentSurvey$Year, 
+    levels = c("FirstYear", "Sophomore", "Junior", "Senior"), ordered = TRUE)
+data(Cereal)
+```
+
+# The Bucknell Vortex
+```{r}
+set.seed(1)
+artwork <- canvas_flame(colors = c("darkorange", "navy"), 
+                        background = "white", iterations = 10000000, 
+                        variations = c(2,4,6,8,10,12,14,16), symmetry = 6, 
+                        zoom = 2, blend = TRUE, display = 
+                          c("colored", "logdensity"), 
+                        resolution = 1846, gamma = 1)
+
+artwork
+```
+
+# Electric Mold
+```{r}
+set.seed(1)
+artwork <- canvas_slime(colors = colorPalette("dark2"), 
+                        background = "skyblue", iterations = 2000, 
+                        agents = 2000, layout = c("wave"), 
+                        resolution = 1000)
+
+artwork
+```
+
+
+# Brain Tiles
+```{r}
+set.seed(1)
+artwork <- canvas_tiles(colors = colorPalette("flag"),
+                        background = "white", iterations = 1000, 
+                        size = 6, col.line = "black", resolution = 100)
+
+artwork
+```
+
+## Cereal Calorie Distribution by Company (ggridges Extension)
+
+**Dataset:** The `Cereal` dataset from `Lock5Data` contains nutritional information for breakfast cereals, including calories, sodium, sugar, and fiber content, grouped by company.
+
+**What it shows:** A gradient density ridgeline plot showing the distribution of calories per serving across cereal companies. The color gradient encodes tail probability — darker regions represent the tails of the distribution — making it easy to spot which companies produce more calorie-extreme cereals.
+
+```{r}
+ggplot(Cereal, aes(x = Calories, y = Company, fill = 0.5 - abs(0.5 - after_stat(ecdf)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE) +
+  scale_fill_viridis_c(name = "Tail probability", direction = -1)
+```
+
+## Confidence Levels: Intro Stat Dashboard
+
+**Dataset:** The `Cereal` dataset from `Lock5Data` contains nutritional information for breakfast cereals, including calories, sodium, sugar, and fiber content, grouped by company.
+
+**What it shows:** A gradient density ridgeline plot showing the distribution of calories per serving across cereal companies. The color gradient encodes tail probability — darker regions represent the tails of the distribution — making it easy to spot which companies produce more calorie-extreme cereals.
+
+## Confidence Level Bootstrap Dashboard
+
+**Dataset:** The `NBAPlayers2019` dataset from `Lock5Data` contains statistics for 193 NBA players from the 2019 season. The variable used is `Age`, representing each player's age in years.
+
+**What it shows:** This tab from the Intro Stats Flexdashboard demonstrates bootstrap sampling distributions of the sample mean age. The user controls sample size and confidence level via sliders. The shaded region shows the central X% of bootstrap means forming a confidence interval — wider at higher confidence levels. This illustrates how confidence intervals are constructed empirically without assuming anything about the population distribution.
+
+
+![](introstatpic.png)
+
+## Cereal Calories with Sodium Jitter by Company
+
+**Dataset:** Same `Cereal` dataset from `Lock5Data`. Variables used are calories (x-axis), company (y-axis), and sodium content (encoded as point size).
+
+**What it shows:** A jittered ridgeline plot where individual cereals are overlaid as points on top of their company's calorie density. Point shape varies by company and point size encodes sodium content, revealing which companies have high-sodium, high-calorie outliers.
+
+```{r}
+ggplot(Cereal, aes(x = Calories, y = Company, fill = Company)) +
+  geom_density_ridges(
+    aes(point_shape = Company, point_fill = Company, point_size = Sodium), 
+    alpha = .2, point_alpha = 1, jittered_points = TRUE, scale = 1
+  ) +
+  scale_point_color_hue(l = 40) + scale_point_size_continuous(range = c(0.5, 4)) +
+  scale_discrete_manual(aesthetics = "point_shape", values = c(21, 22, 23))
+```
+
+
+## Student TV Watching by Year
+
+**Dataset:** The `StudentSurvey` dataset from `Lock5Data` contains survey responses from college students. Variables used are `Year` (class year, ordered from FirstYear to Senior) and `TV` (hours of TV watched per week).
+
+**What it shows:** A violin plot overlaid with a boxplot showing how weekly TV consumption varies across class years.
+
+```{r}
+ggplot(StudentSurvey, aes(x = Year, y = TV, fill = Year)) + geom_violin(scale = "width", alpha = .5, draw_quantiles = c(.25,.5,.75)) + guides(fill = "none") + stat_summary(fun.data = "mean_sdl", fun.args = list(mult = 1), geom = "pointrange", color = "red") + geom_boxplot(width =.25)
+```

@@ -1,0 +1,4 @@
+"0","cfbdata <- cfbdata[cfbdata$Year != 2020, ]"
+"0","cols <- c(""YDS"", ""R_ATT"", ""R_AVG"", ""ATT"", ""CMPPercent"", ""RTG"", ""RUN_PERCENT"")"
+"0","cfbdata[cols] <- lapply(cfbdata[cols], function(x) as.numeric(gsub("","", """", x)))"
+"0","cfbdata <- cfbdata[complete.cases(cfbdata), ]"

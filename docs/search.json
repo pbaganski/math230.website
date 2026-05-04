@@ -1,0 +1,49 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2026-05-04T18:52:06-04:00"
+    },
+    {
+      "path": "index.html",
+      "title": "My Website",
+      "description": "Welcome to the website.\n",
+      "author": [],
+      "contents": "\n\n\n\n\n\n\n",
+      "last_modified": "2026-05-04T18:52:10-04:00"
+    },
+    {
+      "path": "Part3.html",
+      "title": "Analyzing the Change In Offensive Philosophy",
+      "description": "A Data Storyboard\n",
+      "author": [
+        {
+          "name": "Patrick Baganski",
+          "url": {}
+        }
+      ],
+      "date": "`r Sys.Date()`",
+      "contents": "\nThe data set I used for this story boarding contains NFL team-level offensive statistics spanning two decades, from 2003 to 2023. Coming from Kaggle and gathered from Pro Football Reference, the data includes one observation per team per season. In total there are 672 total team-seasons across the 32 franchises. Each row represents a single team’s full-season performance, capturing a wide range of offensive metrics including passing attempts, rushing attempts, yards gained, touchdowns, turnovers, points scored, and win-loss record. The data set contains 35 variables in total. The data provides a complete and consistent picture of how NFL offenses have evolved over this time.\nThe five primary variables driving this analysis are pass attempt percentage, win percentage, yards per play, turnovers, and points scored. Pass attempt percentage, calculated as pass attempts divided by total plays, serves as the central measure of a team’s offensive philosophy, allowing us to classify teams as run-heavy, balanced, or pass-heavy in any given season. Win percentage captures team success and serves to show how well a team performs throughout the analysis. Yards per play measures offensive efficiency, telling us how many yards a team gains on average per offensive snap regardless of play type. Turnovers, which include both interceptions and fumbles lost, show the cost of aggressive passing strategies, and points scored serves as a bridge between offensive production and winning. Together these five variables allow us to tell a full story about whether the NFL’s two-decade shift toward passing has actually been successful for offenses, or whether the hidden cost of turnovers has undermined the supposed advantages of a pass-heavy approach.\n\n\n\n\n\n\n\n\n\n\n",
+      "last_modified": "2026-05-04T18:52:11-04:00"
+    },
+    {
+      "path": "pastvis.html",
+      "title": "A Wide Range of Data Visualizations",
+      "description": "A Collection.\n",
+      "author": [
+        {
+          "name": "Patrick Baganski",
+          "url": {}
+        }
+      ],
+      "date": "`r Sys.Date()`",
+      "contents": "\n\n\n\nThe Bucknell Vortex\n\n\n\nElectric Mold\n\n\n\nBrain Tiles\n\n\n\nCereal Calorie Distribution by Company (ggridges Extension)\nDataset: The Cereal dataset from Lock5Data contains nutritional information for breakfast cereals, including calories, sodium, sugar, and fiber content, grouped by company.\nWhat it shows: A gradient density ridgeline plot showing the distribution of calories per serving across cereal companies. The color gradient encodes tail probability — darker regions represent the tails of the distribution — making it easy to spot which companies produce more calorie-extreme cereals.\n\n\n\nConfidence Levels: Intro Stat Dashboard\nDataset: The Cereal dataset from Lock5Data contains nutritional information for breakfast cereals, including calories, sodium, sugar, and fiber content, grouped by company.\nWhat it shows: A gradient density ridgeline plot showing the distribution of calories per serving across cereal companies. The color gradient encodes tail probability — darker regions represent the tails of the distribution — making it easy to spot which companies produce more calorie-extreme cereals.\nConfidence Level Bootstrap Dashboard\nDataset: The NBAPlayers2019 dataset from Lock5Data contains statistics for 193 NBA players from the 2019 season. The variable used is Age, representing each player’s age in years.\nWhat it shows: This tab from the Intro Stats Flexdashboard demonstrates bootstrap sampling distributions of the sample mean age. The user controls sample size and confidence level via sliders. The shaded region shows the central X% of bootstrap means forming a confidence interval — wider at higher confidence levels. This illustrates how confidence intervals are constructed empirically without assuming anything about the population distribution.\n\nCereal Calories with Sodium Jitter by Company\nDataset: Same Cereal dataset from Lock5Data. Variables used are calories (x-axis), company (y-axis), and sodium content (encoded as point size).\nWhat it shows: A jittered ridgeline plot where individual cereals are overlaid as points on top of their company’s calorie density. Point shape varies by company and point size encodes sodium content, revealing which companies have high-sodium, high-calorie outliers.\n\n\n\nStudent TV Watching by Year\nDataset: The StudentSurvey dataset from Lock5Data contains survey responses from college students. Variables used are Year (class year, ordered from FirstYear to Senior) and TV (hours of TV watched per week).\nWhat it shows: A violin plot overlaid with a boxplot showing how weekly TV consumption varies across class years.\n\n\n\n\n\n\n",
+      "last_modified": "2026-05-04T18:52:29-04:00"
+    }
+  ],
+  "collections": []
+}

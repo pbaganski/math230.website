@@ -1,0 +1,37 @@
+---
+title: "Analyzing the Change In Offensive Philosophy"
+description: |
+  A Data Storyboard
+author:
+  - name: Patrick Baganski
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+The data set I used for this story boarding contains NFL team-level offensive statistics spanning two decades, from 2003 to 2023. Coming from Kaggle and gathered from Pro Football Reference, the data includes one observation per team per season. In total there are 672 total team-seasons across the 32 franchises. Each row represents a single team's full-season performance, capturing a wide range of offensive metrics including passing attempts, rushing attempts, yards gained, touchdowns, turnovers, points scored, and win-loss record. The data set contains 35 variables in total. The data provides a complete and consistent picture of how NFL offenses have evolved over this time.
+
+The five primary variables driving this analysis are pass attempt percentage, win percentage, yards per play, turnovers, and points scored. Pass attempt percentage, calculated as pass attempts divided by total plays, serves as the central measure of a team's offensive philosophy, allowing us to classify teams as run-heavy, balanced, or pass-heavy in any given season. Win percentage captures team success and serves to show how well a team performs throughout the analysis. Yards per play measures offensive efficiency, telling us how many yards a team gains on average per offensive snap regardless of play type. Turnovers, which include both interceptions and fumbles lost, show the cost of aggressive passing strategies, and points scored serves as a bridge between offensive production and winning. Together these five variables allow us to tell a full story about whether the NFL's two-decade shift toward passing has actually been successful for offenses, or whether the hidden cost of turnovers has undermined the supposed advantages of a pass-heavy approach.
+
+![](beamerslides/p1beam.png)
+
+
+![](beamerslides/p2beam.png)
+
+
+![](beamerslides/p3beam.png)
+
+
+![](beamerslides/p4beam.png)
+
+
+![](beamerslides/p5beam.png)
+
+
+![](beamerslides/p6beam.png)
+
+
+![](beamerslides/p7beam.png)

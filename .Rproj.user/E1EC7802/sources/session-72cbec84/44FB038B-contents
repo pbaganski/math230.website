@@ -1,0 +1,156 @@
+---
+title: "My Website"
+description: |
+  Welcome to the website.
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r flyer, fig.width=14, fig.height=10, out.width="100%", echo=FALSE}
+library(ggplot2)
+library(patchwork)
+
+nfl_navy <- "#013369"
+nfl_gold <- "#D4AF37"
+nfl_red  <- "#D50A0A"
+nfl_lt   <- "#F0F4FA"
+nfl_bg   <- "#050E1F"
+
+df <- read.csv("team_stats_2003_2023.csv", stringsAsFactors = FALSE)
+df$pass_ratio <- df$pass_att / (df$pass_att + df$rush_att)
+league_yr <- aggregate(pass_ratio ~ year, data = df, FUN = mean)
+names(league_yr)[2] <- "avg_pass_ratio"
+
+# ── SHARED HELPERS ─────────────────────────────────────────────
+
+make_bullet_box <- function(bullets) {
+  bullet_text <- paste(paste0("\u2022  ", bullets), collapse = "\n\n")
+  ggplot() +
+    annotate("text", x = 0.5, y = 0.5,
+             label = bullet_text,
+             color = nfl_lt, size = 4, hjust = 0.5, vjust = 0.5,
+             lineheight = 1.6) +
+    xlim(0, 1) + ylim(0, 1) +
+    theme_void() +
+    theme(
+      plot.background = element_rect(fill = "#091428", color = nfl_navy,
+                                     linewidth = 1.2),
+      plot.margin = margin(16, 16, 16, 16)
+    )
+}
+
+make_title_block <- function(title, subtitle) {
+  ggplot() +
+    annotate("text", x = 0.5, y = 0.70,
+             label = title,
+             color = nfl_gold, size = 16, fontface = "bold", hjust = 0.5) +
+    annotate("text", x = 0.5, y = 0.28,
+             label = subtitle,
+             color = nfl_lt, size = 6, hjust = 0.5, fontface = "italic") +
+    xlim(0, 1) + ylim(0, 1) +
+    theme_void() +
+    theme(
+      plot.background = element_rect(fill = nfl_bg, color = NA),
+      plot.margin     = margin(20, 16, 8, 16)
+    )
+}
+
+# ── LEFT PANEL: Art Gallery ────────────────────────────────────
+
+left_title <- make_title_block("Art Gallery", "A Sample of Visualizations from this Semester")
+
+set.seed(1)
+library(aRtsy)
+artwork <- canvas_flame(colors = c("darkorange", "navy"),
+                        background = "white", iterations = 10000000,
+                        variations = c(2,4,6,8,10,12,14,16), symmetry = 6,
+                        zoom = 2, blend = TRUE, display =
+                          c("colored", "logdensity"),
+                        resolution = 1846, gamma = 1)
+
+left_graph <- ggplot() +
+  annotation_custom(
+    grob = grid::rasterGrob(png::readPNG("MyArtwork.png"),
+                            width  = unit(1, "npc"),
+                            height = unit(1, "npc")),
+    xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf
+  ) +
+  xlim(0, 1) + ylim(0, 1) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "#091428", color = nfl_navy,
+                                   linewidth = 0.6),
+    plot.margin = margin(8, 16, 8, 16)
+  )
+
+left_bullets <- make_bullet_box(c(
+  "7 Data Visualizations from Throughout the Semester",
+  "Showcases a Wide Range of Projects from the Class"
+))
+
+left_col <- left_title / left_graph / left_bullets +
+  plot_layout(heights = c(1, 2.2, 1))
+
+# ── RIGHT PANEL: NFL Data Story ────────────────────────────────
+
+right_title <- make_title_block("An NFL Data Story", "A Rise in the Passing Game, 2003–2023")
+
+right_graph <- ggplot(league_yr, aes(x = year, y = avg_pass_ratio)) +
+  geom_area(fill = nfl_navy, alpha = 0.4) +
+  geom_line(color = nfl_gold, linewidth = 1.2) +
+  geom_point(color = nfl_gold, size = 2.5) +
+  geom_smooth(method = "lm", se = FALSE, color = nfl_red,
+              linetype = "dashed", linewidth = 0.8) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+                     limits = c(0.50, 0.62)) +
+  scale_x_continuous(breaks = seq(2003, 2023, 4)) +
+  labs(x = NULL, y = "Pass Attempt %") +
+  theme_minimal() +
+  theme(
+    plot.background  = element_rect(fill = nfl_bg, color = NA),
+    panel.background = element_rect(fill = nfl_bg, color = NA),
+    panel.grid.major = element_line(color = "#1A2A4A", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    axis.text        = element_text(color = nfl_lt, size = 9),
+    axis.title.y     = element_text(color = nfl_lt, size = 9,
+                                    angle = 90, margin = margin(r = 8)),
+    plot.margin      = margin(8, 16, 8, 16)
+  )
+
+right_bullets <- make_bullet_box(c(
+  "20 Years of Data for all 32 NFL Teams",
+  "7 Informative Visualizations"
+))
+
+right_col <- right_title / right_graph / right_bullets +
+  plot_layout(heights = c(1, 2.2, 1))
+
+# ── ASSEMBLE: TRUE 50/50 SPLIT ─────────────────────────────────
+
+final <- (left_col | right_col) +
+  plot_layout(widths = c(1, 1)) +
+  plot_annotation(
+    title    = "A Semester in Math 230",
+    subtitle = "A Distill Website",
+    caption  = "Patrick Baganski  |  Math 230 Data Visualization & Computing",
+    theme = theme(
+      plot.background = element_rect(fill = nfl_bg, color = NA),
+      plot.title      = element_text(color = nfl_gold, size = 36,
+                                     face = "bold", lineheight = 0.9,
+                                     margin = margin(t = 18, b = 6)),
+      plot.subtitle   = element_text(color = nfl_lt, size = 12,
+                                     lineheight = 1.5,
+                                     margin = margin(b = 16)),
+      plot.caption    = element_text(color = "#6B8CBE", size = 8,
+                                     face = "italic",
+                                     margin = margin(t = 12)),
+      plot.margin     = margin(24, 24, 18, 24)
+    )
+  )
+
+final
+```
+
